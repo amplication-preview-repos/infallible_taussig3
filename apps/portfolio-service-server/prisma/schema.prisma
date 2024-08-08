@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  createdAt        DateTime   @default(now())
+  description      String?
+  id               String     @id @default(cuid())
+  portfolio        Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId      String?
+  projectName      String?
+  technologiesUsed String?
+  updatedAt        DateTime   @updatedAt
+}
+
+model Portfolio {
+  contactEmail String?
+  createdAt    DateTime      @default(now())
+  id           String        @id @default(cuid())
+  introduction String?
+  ownerName    String?
+  projects     Project[]
+  skills       Skill[]
+  testimonials Testimonial[]
+  title        String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model Skill {
+  createdAt        DateTime   @default(now())
+  id               String     @id @default(cuid())
+  portfolio        Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId      String?
+  proficiencyLevel String?
+  skillName        String?
+  updatedAt        DateTime   @updatedAt
+}
+
+model Testimonial {
+  clientName  String?
+  createdAt   DateTime   @default(now())
+  feedback    String?
+  id          String     @id @default(cuid())
+  portfolio   Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId String?
+  updatedAt   DateTime   @updatedAt
+}
